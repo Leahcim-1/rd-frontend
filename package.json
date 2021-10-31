@@ -1,5 +1,5 @@
 {
-  "name": "re-frontend",
+  "name": "rd-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -26,9 +26,11 @@
     "eslint": "^7.20.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.2.0",
+    "naive-ui": "^2.20.0",
     "prettier": "^2.2.1",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
-    "typescript": "~4.1.5"
+    "typescript": "~4.1.5",
+    "vfonts": "^0.1.0"
   }
 }

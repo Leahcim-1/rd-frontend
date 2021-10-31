@@ -1,30 +1,49 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view />
+  <n-layout has-sider style="height: 100%;">
+    <n-layout-sider v-bind="siderProps">
+      <sider />
+    </n-layout-sider>
+    <n-layout>
+      <router-view />
+    </n-layout>
+  </n-layout>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import { NLayout, NLayoutSider } from 'naive-ui';
+import { defineComponent } from 'vue'
+import Sider from './components/Sider.vue'
+
+const siderProps = {
+  bordered: true,
+  style: "height: 100%",
+  'show-trigger': 'true',
+  'collapse-mode': "width",
+  'collapsed-width': 30,
+  width: '300',
+  'native-scrollbar': false
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+export default defineComponent({
+  name: 'App',
+  components: {
+    NLayout,
+    NLayoutSider,
+    Sider,
+  },
+  setup() {
+    return {
+      siderProps
     }
   }
-}
+
+})
+</script>
+
+<style lang="scss">
+  html, body, #app {
+    height: 100%;
+  }
+
+  
 </style>

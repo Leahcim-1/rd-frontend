@@ -1,4 +1,4 @@
-# re-frontend
+# rd-frontend
 
 ## Project setup
 ```
