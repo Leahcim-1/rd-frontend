@@ -3,10 +3,13 @@
     class="bloglist-card-wrapper"  
     v-for="blog in blogs"
     :key='blog.id'
+    @click="() => goToDetail(blog.id)"
   >
-    <n-card 
+    <n-card
       :title='blog.title'
       :bordered="false"
+      hoverable
+      embedded
       size='huge'
     >
       <template #header-extra>By {{ blog.author_name }}</template>
@@ -21,6 +24,7 @@
 </template>
 <script lang='ts'>
 import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from "vue-router";
 import { NCard, NEllipsis, NDivider } from 'naive-ui'
 import { Blog } from '../type/blog'
 import { fetchBlogLists } from '../api/index'
@@ -38,6 +42,13 @@ export default defineComponent({
 
   setup() {
     const blogs = ref<Blog[]>([])
+    const router = useRouter()
+
+    const goToDetail = (id: string) => {
+      router.push({
+        path: `/blog/${id}`,
+      })
+    }
 
     const getBlogLists = async (config = {}) => {
       const res = await fetchBlogLists<Blog>(config)
@@ -53,7 +64,8 @@ export default defineComponent({
 
     return {
       blogs, 
-      getBlogLists
+      getBlogLists,
+      goToDetail
     }
   }
 })

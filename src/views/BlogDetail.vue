@@ -1,5 +1,6 @@
 <template>
-  <div v-if="blog">
+  <BackArrow :size='24' />
+  <div id="blog-detail-wrapper" v-if="blog">
     <h1>{{ blog.title }}</h1>
     <h3>{{ blog.subtitle }}</h3>
     <p>{{ blog.author_name }}</p>
@@ -9,12 +10,16 @@
   </div>
 </template>
 <script lang='ts'>
-import { computed, defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { Blog } from '../type/blog'
 import { fetchBlogDetail } from '../api/index'
+import BackArrow from '../composable/BackwardArrow.vue'
 
 export default defineComponent({
+  components: {
+    BackArrow
+  },
   setup() {
     const route = useRoute()
     const blog = ref<Blog>()
@@ -29,15 +34,6 @@ export default defineComponent({
       await getBlogDetail()
     })
 
-    watch(
-      () => route.params.id,
-      async newBlogId => {
-        console.log(newBlogId)
-        await getBlogDetail()
-        console.log(blog.value)
-      }
-    )
-
     return {
       blog,
       blogId,
@@ -47,6 +43,9 @@ export default defineComponent({
   }
 })
 </script>
-<style lang="">
+<style lang="scss">
+#blog-detail-wrapper {
+  padding: 36px;
+}
   
 </style>
