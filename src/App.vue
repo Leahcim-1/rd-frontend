@@ -3,7 +3,7 @@
     <n-layout-sider v-bind="siderProps">
       <sider />
     </n-layout-sider>
-    <n-layout>
+    <n-layout v-bind="contentProps">
       <router-view />
     </n-layout>
   </n-layout>
@@ -24,6 +24,10 @@ const siderProps = {
   'native-scrollbar': false
 }
 
+const contentProps = {
+  style: "padding: 15px",
+}
+
 export default defineComponent({
   name: 'App',
   components: {
@@ -33,7 +37,8 @@ export default defineComponent({
   },
   setup() {
     return {
-      siderProps
+      siderProps,
+      contentProps,
     }
   }
 
