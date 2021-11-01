@@ -1,15 +1,19 @@
-<template lang="">
+<template>
   <div>
-    <blog-list />
+    <n-divider title-placement="center"><h3>Comments</h3></n-divider>
   </div>
 </template>
+
 <script lang="ts">
 import { defineComponent } from "vue";
-import BlogList from "../composable/BlogList.vue";
+import { NDivider } from "naive-ui";
 
 export default defineComponent({
   components: {
-    BlogList,
+    NDivider,
+  },
+  setup() {
+    return {};
   },
 });
 </script>

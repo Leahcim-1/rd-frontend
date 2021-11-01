@@ -1,17 +1,16 @@
-<template >
+<template>
   <div>
-    <n-menu id='sider-menu' :options="menus" />
+    <n-menu id="sider-menu" :options="menus" />
   </div>
 </template>
 
-<script lang='ts'>
+<script lang="ts">
 import { defineComponent, h } from "vue";
 import { RouterLink, RouterLinkProps } from "vue-router";
 import routes from "../router/router-config";
-import { NIcon, NMenu, MenuOption } from "naive-ui";
+import { NMenu, MenuOption } from "naive-ui";
 
 const menus: MenuOption[] = routes.map((route) => {
-
   const routeLinkProps: RouterLinkProps = {
     to: route.path,
   };
@@ -36,11 +35,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-  #sider-menu {
-    position: absolute;
-    top: 40%;
-    left: 0%;
-    width: 100%;
-    transform: translate(0%, -70%);
-  }
+#sider-menu {
+  position: absolute;
+  top: 40%;
+  left: 0%;
+  width: 100%;
+  transform: translate(0%, -70%);
+}
 </style>

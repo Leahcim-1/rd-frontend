@@ -1,35 +1,32 @@
 <template>
   <div
-    class="bloglist-card-wrapper"  
+    class="bloglist-card-wrapper"
     v-for="blog in blogs"
-    :key='blog.id'
+    :key="blog.id"
     @click="() => goToDetail(blog.id)"
   >
-    <n-card
-      :title='blog.title'
-      :bordered="false"
-      hoverable
-      embedded
-      size='huge'
-    >
+    <n-card :bordered="false" hoverable embedded size="huge">
+      <template #header
+        ><h2 style="margin: 0px">{{ blog.title }}</h2></template
+      >
       <template #header-extra>By {{ blog.author_name }}</template>
+      <n-h4 prefix="bar">{{ blog.subtitle }}</n-h4>
       <n-ellipsis>{{ blog.body }}</n-ellipsis>
-      <template #footer> 
-        Creadted  
+      <template #footer>
+        Published: {{ getDateString(blog.created_time) }} | Updated:
+        {{ getDateString(blog.updated_time) }}
       </template>
       <template #action> #action </template>
     </n-card>
-    <n-divider width='600'></n-divider>
+    <n-divider width="600"></n-divider>
   </div>
 </template>
-<script lang='ts'>
-import { defineComponent, onMounted, ref } from 'vue'
+<script lang="ts">
+import { defineComponent, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { NCard, NEllipsis, NDivider } from 'naive-ui'
-import { Blog } from '../type/blog'
-import { fetchBlogLists } from '../api/index'
-
-
+import { NCard, NEllipsis, NDivider, NH2, NH4 } from "naive-ui";
+import { Blog } from "../type/blog";
+import { fetchBlogLists } from "../api/index";
 
 export default defineComponent({
   name: "BlogList",
@@ -37,48 +34,52 @@ export default defineComponent({
   components: {
     NCard,
     NEllipsis,
-    NDivider
+    NDivider,
+    NH4,
   },
 
   setup() {
-    const blogs = ref<Blog[]>([])
-    const router = useRouter()
+    const blogs = ref<Blog[]>([]);
+    const router = useRouter();
 
     const goToDetail = (id: string) => {
       router.push({
         path: `/blog/${id}`,
-      })
-    }
+      });
+    };
 
     const getBlogLists = async (config = {}) => {
-      const res = await fetchBlogLists<Blog>(config)
-      console.log(res.message)
-      console.log(res.data)
-      blogs.value = res.data
-    }
+      const res = await fetchBlogLists<Blog>(config);
+      blogs.value = res.data;
+    };
 
+    const getDateString = (date: string) => {
+      const timeStamp = parseInt(date, 10);
+      const dateString = new Date(timeStamp).toLocaleDateString("en-US");
+      return dateString;
+    };
 
     onMounted(async () => {
-      await getBlogLists()
-    })
+      await getBlogLists();
+    });
 
     return {
-      blogs, 
+      blogs,
       getBlogLists,
-      goToDetail
-    }
-  }
-})
+      goToDetail,
+      getDateString,
+    };
+  },
+});
 </script>
 <style lang="scss">
-  .bloglist-card-wrapper {
-    max-width: 600px;
-    padding: 0px 10px;
-  }
+.bloglist-card-wrapper {
+  max-width: 600px;
+  padding: 0px 10px;
+}
 
-  .n-card {
-    max-width: 600px;
-    margin-bottom: 15px;
-
-  }
+.n-card {
+  max-width: 600px;
+  margin-bottom: 15px;
+}
 </style>

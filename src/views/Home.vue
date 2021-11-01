@@ -6,15 +6,15 @@
 </template>
 
 <script lang="ts">
-import HomeHeader from '../components/HomeHeader.vue'
+import HomeHeader from "../components/HomeHeader.vue";
 import { defineComponent } from "vue";
-import BlogContent from '../components/BlogContent.vue';
+import BlogContent from "../components/BlogContent.vue";
 
 export default defineComponent({
   name: "Home",
   components: {
     HomeHeader,
-    BlogContent
-  }
+    BlogContent,
+  },
 });
 </script>
