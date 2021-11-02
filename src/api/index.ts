@@ -37,9 +37,22 @@ const fetchBlogDetail = async <Blog>(
   return res.data;
 };
 
+const fetchCommentsByBlogId = async <Comment>(
+  blogId: string,
+  config: AxiosRequestConfig
+) => {
+  type CommentRes = Response<Comment>;
+  const res = await commentRequest.get<CommentRes>(
+    `/api/comments/blog/${blogId}`,
+    config
+  );
+  return res.data;
+};
+
 export {
   fetchBlogLists,
   fetchBlogDetail,
+  fetchCommentsByBlogId,
   Response,
   AxiosRequestConfig as RequestConfig,
 };

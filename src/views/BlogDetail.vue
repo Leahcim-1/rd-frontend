@@ -1,10 +1,13 @@
 <template>
-  <back-arrow :size="24" />
-  <blog-section />
-  <comment-section />
+  <div id="blog-detail-wrapper" >
+    <back-arrow :size="24" />
+    <blog-section :blogId="blogId" />
+    <comment-section :blogId="blogId" />
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
+import { useRoute } from "vue-router";
 import BackArrow from "../composable/BackwardArrow.vue";
 import BlogSection from "../components/BlogDetailBlogSection.vue";
 import CommentSection from "../components/BlogDetailCommentSection.vue";
@@ -15,10 +18,19 @@ export default defineComponent({
     BlogSection,
     CommentSection,
   },
+  setup() {
+    const route = useRoute();
+    const blogId = computed(() => route.params.id);
+    console.log(blogId.value)
+    return {
+      blogId,
+    };
+  },
 });
 </script>
 <style lang="scss">
 #blog-detail-wrapper {
   padding: 36px;
 }
+
 </style>

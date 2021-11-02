@@ -1,5 +1,5 @@
 <template>
-  <div id="blog-detail-wrapper" v-if="blog">
+  <div class="blog-detail-blog-section" v-if="blog">
     <h1>{{ blog.title }}</h1>
     <h3>{{ blog.subtitle }}</h3>
     <p>By {{ blog.author_name }}</p>
@@ -9,19 +9,22 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { defineComponent, onMounted, ref } from "vue";
 import { Blog } from "../type/blog";
 import { fetchBlogDetail } from "../api/index";
 
 export default defineComponent({
-  setup() {
-    const route = useRoute();
+  props: {
+    blogId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const blog = ref<Blog>();
-    const blogId = computed(() => route.params.id);
 
     const getBlogDetail = async (config = {}) => {
-      const res = await fetchBlogDetail<Blog>(blogId.value as string, config);
+      const res = await fetchBlogDetail<Blog>(props.blogId, config);
       if (res.data.length > 0) blog.value = res.data[0];
     };
 
@@ -37,7 +40,6 @@ export default defineComponent({
 
     return {
       blog,
-      blogId,
       getBlogDetail,
       getDateString,
     };

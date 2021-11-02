@@ -5,7 +5,7 @@ const prodBase = "";
 const dev = {
   user: `${devBase}:5000`,
   blog: `${devBase}:4000`,
-  comment: `${devBase}:6000`,
+  comment: `${devBase}:3000`,
 };
 
 const prod = {
