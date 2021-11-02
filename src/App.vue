@@ -1,5 +1,6 @@
 <template>
   <n-config-provider :theme-overrides="{ common: { fontWeightStrong: '800' } }">
+    <user-menu />
     <n-layout has-sider style="height: 100%">
       <n-layout-sider v-bind="siderProps">
         <sider />
@@ -14,6 +15,7 @@
 <script>
 import { NLayout, NLayoutSider, NConfigProvider, darkTheme } from "naive-ui";
 import { defineComponent } from "vue";
+import UserMenu from "./components/UserMenu.vue";
 import Sider from "./components/Sider.vue";
 
 const siderProps = {
@@ -37,6 +39,7 @@ export default defineComponent({
     NLayoutSider,
     Sider,
     NConfigProvider,
+    UserMenu,
   },
   setup() {
     return {

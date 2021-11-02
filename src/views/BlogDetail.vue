@@ -1,5 +1,5 @@
 <template>
-  <div id="blog-detail-wrapper" >
+  <div id="blog-detail-wrapper">
     <back-arrow :size="24" />
     <blog-section :blogId="blogId" />
     <comment-section :blogId="blogId" />
@@ -21,7 +21,7 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const blogId = computed(() => route.params.id);
-    console.log(blogId.value)
+    console.log(blogId.value);
     return {
       blogId,
     };
@@ -32,5 +32,4 @@ export default defineComponent({
 #blog-detail-wrapper {
   padding: 36px;
 }
-
 </style>
