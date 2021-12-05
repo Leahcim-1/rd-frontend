@@ -37,6 +37,7 @@ export default defineComponent({
 
     const getCommentByBlogId = async (config = {}) => {
       const res = await fetchCommentsByBlogId<Comment>(props.blogId, config);
+      console.log(res)
       if (res.data.length > 0) comments.value = res.data;
     };
 

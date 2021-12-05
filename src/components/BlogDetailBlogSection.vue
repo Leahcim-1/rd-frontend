@@ -25,6 +25,7 @@ export default defineComponent({
 
     const getBlogDetail = async (config = {}) => {
       const res = await fetchBlogDetail<Blog>(props.blogId, config);
+      console.log(res)
       if (res.data.length > 0) blog.value = res.data[0];
     };
 

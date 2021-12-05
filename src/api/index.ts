@@ -24,7 +24,7 @@ const commentRequest: AxiosInstance = axios.create({
 
 const fetchBlogLists = async <Blog>(config: AxiosRequestConfig) => {
   type BlogRes = Response<Blog>;
-  const res = await blogRequest.get<BlogRes>("/api/blogs", config);
+  const res = await blogRequest.get<BlogRes>("/api/blog", config);
   return res.data;
 };
 
@@ -33,7 +33,7 @@ const fetchBlogDetail = async <Blog>(
   config: AxiosRequestConfig
 ) => {
   type BlogRes = Response<Blog>;
-  const res = await blogRequest.get<BlogRes>(`/api/blogs/${id}`, config);
+  const res = await blogRequest.get<BlogRes>(`/api/blog/${id}`, config);
   return res.data;
 };
 
@@ -49,10 +49,18 @@ const fetchCommentsByBlogId = async <Comment>(
   return res.data;
 };
 
+const fetchUserInfo = async () => {
+  const res = await userRequest.get(
+    '/login',
+  );
+  return res.data;
+};
+
 export {
   fetchBlogLists,
   fetchBlogDetail,
   fetchCommentsByBlogId,
+  fetchUserInfo,
   Response,
   AxiosRequestConfig as RequestConfig,
 };

@@ -1,6 +1,8 @@
 <template>
   <div id="user-menu">
-    <div v-if="signedIn" id="user-menu-avatar-menu"></div>
+    <div v-if="signedIn" id="user-menu-avatar-menu">
+      <NAvatar />
+    </div>
     <div v-else id="user-menu-login">
       <n-button>
         <template #icon>
@@ -12,17 +14,29 @@
   </div>
 </template>
 <script>
-import { defineComponent, ref } from "vue";
-import { NButton  } from "naive-ui";
+import { defineComponent, onMounted, ref } from "vue";
+import { NButton, NAvatar } from "naive-ui";
 import { LogInFilled } from '@vicons/material'
+import { fetchUserInfo } from '../api/index'
 
 export default defineComponent({
   components: {
     NButton,
     LogInFilled,
+    NAvatar,
   },
   setup() {
     const signedIn = ref(false);
+    
+    // const userSignIn = async () => {
+    //   const res = await fetchUserInfo()
+    //   print(res)
+    // }
+
+    onMounted(async () => {
+      // await userSignIn()
+    })
+
     return {
       signedIn,
     };

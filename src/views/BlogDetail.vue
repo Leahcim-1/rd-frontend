@@ -21,7 +21,6 @@ export default defineComponent({
   setup() {
     const route = useRoute();
     const blogId = computed(() => route.params.id);
-    console.log(blogId.value);
     return {
       blogId,
     };
