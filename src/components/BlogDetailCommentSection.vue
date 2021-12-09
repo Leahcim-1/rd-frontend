@@ -2,6 +2,9 @@
   <div>
     <n-divider title-placement="center"><h3>Comments</h3></n-divider>
   </div>
+  <n-card v-if="showTextarea">
+    <n-input type="textarea" maxlength="30" show-count />
+  </n-card>
   <n-timeline :icon-size="20">
     <n-timeline-item
       v-for="comment in comments"
@@ -15,16 +18,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-import { NDivider, NTimeline, NTimelineItem } from "naive-ui";
+import { defineComponent, ref, onMounted, computed, watch } from "vue";
+import { NDivider, NTimeline, NTimelineItem, NCard, NInput } from "naive-ui";
 import { Comment } from "../type/comment";
 import { fetchCommentsByBlogId } from "../api/index";
+import { useStore } from "vuex";
 
 export default defineComponent({
   components: {
     NDivider,
     NTimeline,
     NTimelineItem,
+    NCard,
+    NInput,
   },
   props: {
     blogId: {
@@ -35,9 +41,14 @@ export default defineComponent({
   setup(props) {
     const comments = ref<Comment[]>([]);
 
+    const showTextarea = ref(false)
+
+    const store = useStore()
+    const isLogin = computed(() => store.state.isLogin)
+
+
     const getCommentByBlogId = async (config = {}) => {
       const res = await fetchCommentsByBlogId<Comment>(props.blogId, config);
-      console.log(res);
       if (res.data.length > 0) comments.value = res.data;
     };
 
@@ -52,10 +63,15 @@ export default defineComponent({
       await getCommentByBlogId();
     });
 
+    watch(isLogin, (isLogin) => {
+      if (isLogin) showTextarea.value = true
+    })
+
     return {
       comments,
       getCommentByBlogId,
       getDateAndTime,
+      showTextarea
     };
   },
 });
