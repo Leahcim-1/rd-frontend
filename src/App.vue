@@ -14,7 +14,7 @@
 
 <script>
 import { NLayout, NLayoutSider, NConfigProvider, darkTheme } from "naive-ui";
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, on, onMounted, onUpdated } from "vue";
 import { useStore } from 'vuex'
 import UserMenu from "./components/UserMenu.vue";
 import Sider from "./components/Sider.vue";
@@ -51,7 +51,7 @@ export default defineComponent({
       store.commit('login')
     }
 
-    onMounted(() => {
+    const loadGoogle = () => {
       window.google.accounts.id.initialize({
         client_id: "869629692788-45qf48a9i2t88hdhjiei336msfm12sov.apps.googleusercontent.com",
         callback: handleCredentialResponse
@@ -63,7 +63,16 @@ export default defineComponent({
       );
 
       window.google.accounts.id.prompt(); // also display the One Tap dialog
+    }
+
+    onMounted(() => {
+      loadGoogle()
     })
+
+    onUpdated(() => {
+      if (!store.state.isLogin) loadGoogle()
+    })
+    
     return {
       siderProps,
       contentProps,

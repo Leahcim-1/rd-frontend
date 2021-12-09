@@ -1,31 +1,38 @@
 <template>
-  <div
-    class="bloglist-card-wrapper"
-    v-for="blog in blogs"
-    :key="blog.id"
-    @click="() => goToDetail(blog.id)"
+  <n-spin
+    :show="loading"
+    size="large"
+    :key="loading"
   >
-    <n-card :bordered="false" hoverable embedded size="huge">
-      <template #header
-        ><h2 style="margin: 0px">{{ blog.title }}</h2></template
-      >
-      <template #header-extra>By {{ blog.user_name }}</template>
-      <n-h4 prefix="bar">{{ blog.subtitle }}</n-h4>
-      <n-ellipsis>{{ blog.body }}</n-ellipsis>
-      <template #footer>
-        Published: {{ getDateString(blog.create_time) }} | Updated:
-        {{ getDateString(blog.update_time) }}
-      </template>
-    </n-card>
-    <n-divider width="600"></n-divider>
-  </div>
+    <div
+      class="bloglist-card-wrapper"
+      v-for="blog in blogs"
+      :key="blog.id"
+      @click="() => goToDetail(blog.id)"
+    >
+      <n-card :bordered="false" hoverable embedded size="huge">
+        <template #header
+          ><h2 style="margin: 0px">{{ blog.title }}</h2></template
+        >
+        <template #header-extra>By {{ blog.user_name }}</template>
+        <n-h4 prefix="bar">{{ blog.subtitle }}</n-h4>
+        <n-ellipsis>{{ blog.body }}</n-ellipsis>
+        <template #footer>
+          Published: {{ getDateString(blog.create_time) }} | Updated:
+          {{ getDateString(blog.update_time) }}
+        </template>
+      </n-card>
+      <n-divider width="600"></n-divider>
+    </div>
+  </n-spin>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, nextTick, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { NCard, NEllipsis, NDivider, NH2, NH4 } from "naive-ui";
+import { NCard, NEllipsis, NDivider, NH4, NSpin } from "naive-ui";
 import { Blog } from "../type/blog";
 import { fetchBlogLists } from "../api/index";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "BlogList",
@@ -35,17 +42,24 @@ export default defineComponent({
     NEllipsis,
     NDivider,
     NH4,
+    NSpin
   },
 
   setup() {
     const blogs = ref<Blog[]>([]);
     const router = useRouter();
+    const store = useStore();
+
+    const loading = ref(false);
 
     const goToDetail = (id: string) => {
       router.push({
         path: `/blog/${id}`,
       });
     };
+
+    const limit = computed(() => store.state.pagination.limit)
+    const offset = computed(() => store.state.pagination.offset)
 
     const getBlogLists = async (config = {}) => {
       const res = await fetchBlogLists<Blog>(config);
@@ -59,11 +73,30 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      await getBlogLists();
+      const params = {
+        limit: limit.value,
+        offset: offset.value,
+      }
+      loading.value = true;
+      await getBlogLists({ params });
+      loading.value = false;
+      console.log(loading.value)
+
     });
+
+    watch([limit, offset], async ([newLimit, newOffset]) => {
+      const params = {
+        limit: limit.value,
+        offset: offset.value,
+      }
+      loading.value = true;
+      await getBlogLists({ params });
+      loading.value = false;
+    })
 
     return {
       blogs,
+      loading,
       getBlogLists,
       goToDetail,
       getDateString,

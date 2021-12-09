@@ -4,7 +4,7 @@ const prodBase = "http://0.0.0.0";
 
 const dev = {
   user: `${devBase}:5000`,
-  blog: "https://uwu5f8dejb.execute-api.us-east-1.amazonaws.com",
+  blog: `${devBase}:8000`,
   comment: `${devBase}:3000`,
 };
 
