@@ -1,6 +1,11 @@
 import { RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
 
+const AUTH_ROUTES = [
+  "/postBlog",
+  "/admin",
+]
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -20,8 +25,18 @@ const routes: Array<RouteRecordRaw> = [
     path: "/postBlog",
     name: "Post Blog",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/CreateBlog.vue"),
+      import(/* webpackChunkName: "postBlog" */ "../views/CreateBlog.vue"),
+  },
+  {
+    path: "/admin",
+    name: "Manage Your Stuffs",
+    component: () =>
+      import(/* webpackChunkName: "admin" */ "../views/CreateBlog.vue"),
   }
 ];
 
 export default routes;
+
+export {
+  AUTH_ROUTES
+}

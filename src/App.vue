@@ -2,8 +2,12 @@
   <n-config-provider :theme-overrides="{ common: { fontWeightStrong: '800' } }">
     <user-menu />
     <n-layout has-sider style="height: 100%">
-      <n-layout-sider v-bind="siderProps">
-        <sider />
+      <n-layout-sider 
+        v-bind="siderProps"
+        @expand="collapsed = false"
+        @collapse="collapsed = true"
+      >
+        <sider :collapsed="collapsed" />
       </n-layout-sider>
       <n-layout v-bind="contentProps">
         <router-view />
@@ -14,7 +18,7 @@
 
 <script>
 import { NLayout, NLayoutSider, NConfigProvider, darkTheme } from "naive-ui";
-import { defineComponent, on, onMounted, onUpdated } from "vue";
+import { defineComponent, on, onMounted, onUpdated, ref } from "vue";
 import { useStore } from 'vuex'
 import UserMenu from "./components/UserMenu.vue";
 import Sider from "./components/Sider.vue";
@@ -24,7 +28,7 @@ const siderProps = {
   style: "height: 100%",
   "show-trigger": "true",
   "collapse-mode": "width",
-  "collapsed-width": 30,
+  "collapsed-width": 64,
   width: "300",
   "native-scrollbar": false,
 };
@@ -77,6 +81,7 @@ export default defineComponent({
       siderProps,
       contentProps,
       darkTheme,
+      collapsed: ref(false)
     };
 
    
