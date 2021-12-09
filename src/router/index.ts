@@ -10,13 +10,6 @@ routes.push({
     import(/* webpackChunkName: "/blog/:id" */ "../views/BlogDetail.vue"),
 });
 
-routes.push({
-  path: "/postBlog",
-  name: "PostBlog",
-  component: () =>
-    import(/* webpackChunkName: "about" */ "../views/CreateBlog.vue"),
-});
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,

@@ -16,6 +16,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
+  {
+    path: "/postBlog",
+    name: "Post Blog",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/CreateBlog.vue"),
+  }
 ];
 
 export default routes;

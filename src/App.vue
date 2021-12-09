@@ -14,7 +14,8 @@
 
 <script>
 import { NLayout, NLayoutSider, NConfigProvider, darkTheme } from "naive-ui";
-import { defineComponent } from "vue";
+import { defineComponent, onMounted } from "vue";
+import { useStore } from 'vuex'
 import UserMenu from "./components/UserMenu.vue";
 import Sider from "./components/Sider.vue";
 
@@ -41,12 +42,35 @@ export default defineComponent({
     NConfigProvider,
     UserMenu,
   },
+
   setup() {
+    const store = useStore()
+
+    const handleCredentialResponse = (response) => {
+      console.log("Encoded JWT ID token: " + response.credential);
+      store.commit('login')
+    }
+
+    onMounted(() => {
+      window.google.accounts.id.initialize({
+        client_id: "869629692788-45qf48a9i2t88hdhjiei336msfm12sov.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+      });
+
+      window.google.accounts.id.renderButton(
+        document.getElementById("sign-in-btn"),
+        { theme: "outline", size: "large" }  // customization attributes
+      );
+
+      window.google.accounts.id.prompt(); // also display the One Tap dialog
+    })
     return {
       siderProps,
       contentProps,
       darkTheme,
     };
+
+   
   },
 });
 </script>
