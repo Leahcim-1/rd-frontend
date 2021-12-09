@@ -9,14 +9,13 @@
       <template #header
         ><h2 style="margin: 0px">{{ blog.title }}</h2></template
       >
-      <template #header-extra>By {{ blog.author_name }}</template>
+      <template #header-extra>By {{ blog.user_name }}</template>
       <n-h4 prefix="bar">{{ blog.subtitle }}</n-h4>
       <n-ellipsis>{{ blog.body }}</n-ellipsis>
       <template #footer>
-        Published: {{ getDateString(blog.created_time) }} | Updated:
-        {{ getDateString(blog.updated_time) }}
+        Published: {{ getDateString(blog.create_time) }} | Updated:
+        {{ getDateString(blog.update_time) }}
       </template>
-      <template #action> #action </template>
     </n-card>
     <n-divider width="600"></n-divider>
   </div>
@@ -54,7 +53,7 @@ export default defineComponent({
     };
 
     const getDateString = (date: string) => {
-      const timeStamp = parseInt(date, 10);
+      const timeStamp = Date.parse(date);
       const dateString = new Date(timeStamp).toLocaleDateString("en-US");
       return dateString;
     };

@@ -3,11 +3,11 @@ interface Blog {
   title: string;
   subtitle: string;
   body: string;
-  author_id: string;
-  author_name: string;
+  user_id: string;
+  user_name: string;
   created_time: string;
   updated_time: string;
-  tags: [];
+  tags: string;
 }
 
 export { Blog };

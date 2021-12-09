@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   </head>
   <body>
     <noscript>
@@ -13,5 +15,21 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+        <script>
+      function handleCredentialResponse(response) {
+        console.log("Encoded JWT ID token: " + response.credential);
+      }
+      window.onload = function () {
+        google.accounts.id.initialize({
+          client_id: "869629692788-45qf48a9i2t88hdhjiei336msfm12sov.apps.googleusercontent.com",
+          callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+          document.getElementById("sign-in-btn"),
+          { theme: "outline", size: "large" }  // customization attributes
+        );
+        google.accounts.id.prompt(); // also display the One Tap dialog
+      }
+    </script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>{{ title }}</h1>
+  <div class="home-header">
+    <h1 class="home-header-title">{{ title }}</h1>
     <n-divider></n-divider>
   </div>
 </template>
@@ -21,4 +21,8 @@ export default defineComponent({
   },
 });
 </script>
-<style lang=""></style>
+<style lang="scss">
+.home-header {
+  height: 100px;
+}
+</style>
