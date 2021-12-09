@@ -85,12 +85,12 @@ export default defineComponent({
     }
 
     const menus: MenuOption[] = routes.filter(route => !store.state.isLogin && !AUTH_ROUTES.includes(route.path))
-                                      .filter(route => route.name)
+                                      .filter(route => !!route.name)
                                       .map(menuProcess);
     const menuRefs = ref(menus)
     
     watch(isLogin, isLogin => {
-      if (isLogin) menuRefs.value = routes.map(menuProcess);
+      if (isLogin) menuRefs.value = routes.filter(route => !!route.name).map(menuProcess);
     })
 
     return {
