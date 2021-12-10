@@ -1,7 +1,9 @@
 <template>
   <n-spin :show="loading" size="large" :key="loading">
+    <n-h2>User's Blog</n-h2>
     <list-table :columns="columns" :lists="blogs" />
   </n-spin>
+  <n-divider />
 </template>
 <script lang="ts">
 import {
@@ -21,6 +23,10 @@ import ListTable from "../composable/ListsTable.vue";
 import ActionDropDownMenu from "../composable/ActionDropDownMenu.vue";
 
 const columns: DataTableColumns = [
+  {
+    title: "ID",
+    key: "id",
+  },
   {
     title: "Title",
     key: "title",
@@ -64,7 +70,6 @@ const columns: DataTableColumns = [
         // @ts-ignore
         ActionDropDownMenu,
         {
-          size: "small",
           rowEdit: () => {
             console.log("edit", row.id);
           },
@@ -83,6 +88,8 @@ export default defineComponent({
   components: {
     NSpin,
     ListTable,
+    NH2,
+    NDivider
   },
 
   setup() {

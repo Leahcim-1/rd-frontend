@@ -1,27 +1,91 @@
 <template>
-  <n-spin
-    :show="loading"
-    size="large"
-    :key="loading"
-  >
-    <list-table :columns="[]" :lists="[] "/>
+  <n-spin :show="loading" size="large" :key="loading">
+    <n-h2>User's Comments</n-h2>
+    <list-table :columns="columns" :lists="blogs" />
   </n-spin>
+  <n-divider />
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref,
+  watch,
+  h,
+} from "vue";
 import { useRouter } from "vue-router";
-import { NCard, NEllipsis, NDivider, NH4, NSpin } from "naive-ui";
+import { NDivider, NH2, NSpin, NTag, DataTableColumns } from "naive-ui";
 import { Blog } from "../type/blog";
 import { fetchBlogLists } from "../api/index";
 import { useStore } from "vuex";
-import ListTable from '../composable/ListsTable.vue'
+import ListTable from "../composable/ListsTable.vue";
+import ActionDropDownMenu from "../composable/ActionDropDownMenu.vue";
+
+const columns: DataTableColumns = [
+  {
+    title: "Title",
+    key: "title",
+  },
+  {
+    title: "Subtitle",
+    key: "subtitle",
+  },
+  {
+    title: "Tag",
+    key: "tag",
+    render(row) {
+      return h(
+        NTag,
+        {
+          style: {
+            marginRight: "6px",
+          },
+          type: "info",
+        },
+        {
+          default: () => row.tag,
+        }
+      );
+    },
+  },
+  {
+    key: "create_time",
+    title: "Created Time",
+  },
+  {
+    key: "update_time",
+    title: "Updated Time",
+  },
+  {
+    title: "Action",
+    key: "actions",
+    render(row) {
+      return h(
+        // eslint-disable-next-line
+        // @ts-ignore
+        ActionDropDownMenu,
+        {
+          rowEdit: () => {
+            console.log("edit", row.id);
+          },
+          rowDelete: () => {
+            console.log("delete", row.id);
+          },
+        }
+      );
+    },
+  },
+];
 
 export default defineComponent({
   name: "BlogList",
 
   components: {
     NSpin,
-    ListTable
+    ListTable,
+    NH2,
+    NDivider
   },
 
   setup() {
@@ -37,8 +101,8 @@ export default defineComponent({
       });
     };
 
-    const limit = computed(() => store.state.pagination.limit)
-    const offset = computed(() => store.state.pagination.offset)
+    const limit = computed(() => store.state.pagination.limit);
+    const offset = computed(() => store.state.pagination.offset);
 
     const getBlogLists = async (config = {}) => {
       const res = await fetchBlogLists<Blog>(config);
@@ -51,27 +115,25 @@ export default defineComponent({
       return dateString;
     };
 
+    const updateAction = () => {
+      blogs.value.map;
+    };
+
     onMounted(async () => {
       const params = {
         limit: limit.value,
         offset: offset.value,
-      }
-      loading.value = true;
+      };
       await getBlogLists({ params });
-      loading.value = false;
-      console.log(loading.value)
-
     });
 
     watch([limit, offset], async ([newLimit, newOffset]) => {
       const params = {
         limit: limit.value,
         offset: offset.value,
-      }
-      loading.value = true;
+      };
       await getBlogLists({ params });
-      loading.value = false;
-    })
+    });
 
     return {
       blogs,
@@ -79,6 +141,7 @@ export default defineComponent({
       getBlogLists,
       goToDetail,
       getDateString,
+      columns,
     };
   },
 });
