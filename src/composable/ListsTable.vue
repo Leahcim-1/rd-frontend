@@ -1,6 +1,12 @@
 <template>
   <div id="lists-table">
-    <n-data-table :columns="col" :data="data" />
+    <n-data-table 
+      :columns="col" 
+      :data="data" 
+      :pagination="{
+        pageSize: 5
+      }"
+    />
   </div>
 </template>
 
