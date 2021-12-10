@@ -133,6 +133,7 @@ export default defineComponent({
       blogForm,
       rules,
       formMapper,
+      submitHandler
     };
   },
 });
