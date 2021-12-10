@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import jwtDecode from "jwt-decode";
 
 export default createStore({
   state: {
@@ -8,6 +9,12 @@ export default createStore({
       offset: 0,
       totalRecord: 100,
     },
+    userInfo: {
+      name: "",
+      email: "",
+      picture: "",
+      googleID: "",
+    }
   },
   getters: {
     loginStatus(state) { return state.isLogin },
@@ -35,6 +42,15 @@ export default createStore({
 
     logout(state) {
       state.isLogin = false
+    },
+
+    parseToken(state, jwt) {
+      const playload: any = jwtDecode(jwt)
+      state.userInfo.email = playload!.email
+      state.userInfo.googleID = playload!.sub
+      state.userInfo.name = playload!.name
+      state.userInfo.picture = playload!.picture
+      console.log(state.userInfo)
     },
 
     nextPage(state) {
