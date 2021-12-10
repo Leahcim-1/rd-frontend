@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, h, watch, ref, computed } from "vue";
+import { defineComponent, h, watch, ref, computed, DefineComponent } from "vue";
 import { RouterLink, RouterLinkProps } from "vue-router";
 import routes, { AUTH_ROUTES } from "../router/router-config";
 import { NMenu, MenuOption, NImage, NSpace, NIcon } from "naive-ui";
@@ -57,14 +57,14 @@ export default defineComponent({
 
     const isLogin = computed(() => store.state.isLogin)
 
-    const iconMapper = {
+    const iconMapper: { [path: string]: any } = {
       "/": HomeOutlined,
       "/about": ContactSupportOutlined,
       "/postBlog": PostAddRound,
       "/admin": AccountCircleOutlined,
     }
 
-    const renderIcon = (icon) => {
+    const renderIcon = (icon: DefineComponent) => {
       return () => h(NIcon, null, { default: () => h(icon) })
     }
 
@@ -80,7 +80,7 @@ export default defineComponent({
       return {
         label: () => h(RouterLink, routeLinkProps, { default: () => route.name }),
         key: route.name as string,
-        icon: renderIcon(icon),
+        icon: renderIcon(icon as DefineComponent),
       };
     }
 

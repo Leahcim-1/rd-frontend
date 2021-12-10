@@ -35,6 +35,8 @@ const siderProps = {
 
 const contentProps = {
   style: "padding: 15px",
+  overflow: "hidden",
+  width: "100%"
 };
 
 export default defineComponent({
@@ -98,5 +100,6 @@ body,
   font-size: 18px;
   margin: 0px;
   padding: 0px;
+  box-sizing: border-box;
 }
 </style>

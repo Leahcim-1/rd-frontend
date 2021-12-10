@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin",
     name: "Manage Your Stuffs",
     component: () =>
-      import(/* webpackChunkName: "admin" */ "../views/CreateBlog.vue"),
+      import(/* webpackChunkName: "admin" */ "../views/Admin.vue"),
   }
 ];
 
