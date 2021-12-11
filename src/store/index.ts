@@ -13,7 +13,7 @@ export default createStore({
       name: "",
       email: "",
       picture: "",
-      googleID: "",
+      id: "",
     }
   },
   getters: {
@@ -46,14 +46,14 @@ export default createStore({
         name: "",
         email: "",
         picture: "",
-        googleID: "",
+        id: "",
       }
     },
 
     parseToken(state, jwt) {
       const playload: any = jwtDecode(jwt)
       state.userInfo.email = playload!.email
-      state.userInfo.googleID = playload!.sub
+      state.userInfo.id = playload!.sub
       state.userInfo.name = playload!.name
       state.userInfo.picture = playload!.picture
     },

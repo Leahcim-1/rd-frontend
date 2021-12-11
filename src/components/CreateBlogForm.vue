@@ -49,6 +49,8 @@ import {
 import { FileUploadFilled } from "@vicons/material";
 import { Blog } from "../type/blog";
 import { postBlog } from "../api/index";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -61,6 +63,10 @@ export default defineComponent({
   },
   setup() {
     const formRef = ref(null);
+
+    const router = useRouter();
+
+    const store = useStore();
 
     const formMapper = [
       {
@@ -89,7 +95,7 @@ export default defineComponent({
       title: "",
       subtitle: "",
       body: "",
-      tags: "",
+      tag: "",
     });
 
     const rules = ref<FormRules>({
@@ -113,6 +119,8 @@ export default defineComponent({
       },
     });
 
+    const message = useMessage();
+
     const submitHandler = async () => {
       let valid = true;
 
@@ -123,9 +131,26 @@ export default defineComponent({
       });
 
       if (!valid) {
-        console.log("Invalid");
+        message.error("Post Blog Fail~");
         return;
       }
+
+      const blogData = Object.assign({}, blogForm.value, {
+          user_name: store.state.userInfo.name,
+          user_id: store.state.userInfo.id,
+      })
+
+      await postBlog<Partial<Blog>>(
+        blogData,
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      message.success("Post Blog Successfully")
+      setTimeout(() => router.replace({ name: 'Home' }), 1)
     };
 
     return {
@@ -133,7 +158,7 @@ export default defineComponent({
       blogForm,
       rules,
       formMapper,
-      submitHandler
+      submitHandler,
     };
   },
 });

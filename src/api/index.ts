@@ -63,10 +63,9 @@ const checkLogin = async (config: AxiosRequestConfig) => {
   }
 }
 
-const postBlog = async <Blog>(blog: Blog) => {
-  const res = await blogRequest.post("/api/blog", {
-    data: blog,
-  });
+const postBlog = async <Blog>(data: Blog, config: AxiosRequestConfig = {}) => {
+  const res = await blogRequest.post("/api/blog", data, config);
+  console.log(res)
   return res.data;
 };
 

@@ -2,10 +2,10 @@
   <div class="blog-detail-blog-section" v-if="blog">
     <h1>{{ blog.title }}</h1>
     <h3>{{ blog.subtitle }}</h3>
-    <p>By {{ blog.author_name }}</p>
+    <p>By {{ blog.user_name }}</p>
     <p>{{ blog.body }}</p>
-    <p>Published: {{ getDateString(blog.created_time) }}</p>
-    <p>Last Updated By: {{ getDateString(blog.updated_time) }}</p>
+    <p>Published: {{ getDateString(blog.create_time) }}</p>
+    <p>Last Updated By: {{ getDateString(blog.update_time) }}</p>
   </div>
 </template>
 <script lang="ts">
@@ -30,7 +30,7 @@ export default defineComponent({
     };
 
     const getDateString = (date: string) => {
-      const timeStamp = parseInt(date, 10);
+      const timeStamp = Date.parse(date);
       const dateString = new Date(timeStamp).toLocaleDateString("en-US");
       return dateString;
     };

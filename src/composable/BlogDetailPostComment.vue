@@ -6,7 +6,7 @@
       title="Response In Action"
     >
       <n-space
-        vertical="true"
+        :vertical="true"
       >
         <n-input type="textarea" maxlength="30" show-count />
         <n-button @click="postCommentHandler">Post</n-button>
@@ -41,7 +41,8 @@ export default defineComponent({
     })
 
     return {
-      showTextarea
+      showTextarea,
+      postCommentHandler() { return true }
     }
 
   }

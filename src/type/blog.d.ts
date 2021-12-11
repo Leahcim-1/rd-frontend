@@ -7,7 +7,7 @@ interface Blog {
   user_name: string;
   created_time: string;
   updated_time: string;
-  tags: string;
+  tag: string;
 }
 
 export { Blog };
