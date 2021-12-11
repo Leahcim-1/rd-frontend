@@ -80,8 +80,6 @@ export default defineComponent({
       loading.value = true;
       await getBlogLists({ params });
       loading.value = false;
-      console.log(loading.value)
-
     });
 
     watch([limit, offset], async ([newLimit, newOffset]) => {

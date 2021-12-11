@@ -42,6 +42,12 @@ export default createStore({
 
     logout(state) {
       state.isLogin = false
+      state.userInfo = {
+        name: "",
+        email: "",
+        picture: "",
+        googleID: "",
+      }
     },
 
     parseToken(state, jwt) {
@@ -50,7 +56,6 @@ export default createStore({
       state.userInfo.googleID = playload!.sub
       state.userInfo.name = playload!.name
       state.userInfo.picture = playload!.picture
-      console.log(state.userInfo)
     },
 
     nextPage(state) {

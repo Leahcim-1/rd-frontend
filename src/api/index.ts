@@ -54,6 +54,15 @@ const fetchUserInfo = async () => {
   return res.data;
 };
 
+const checkLogin = async (config: AxiosRequestConfig) => {
+  try {
+    const res = await userRequest.post("/verifyGoogleIdToken", config);
+    if (res.status == 200) return true;
+  } catch(e) {
+    return false
+  }
+}
+
 const postBlog = async <Blog>(blog: Blog) => {
   const res = await blogRequest.post("/api/blog", {
     data: blog,
@@ -67,6 +76,7 @@ export {
   fetchCommentsByBlogId,
   postBlog,
   fetchUserInfo,
+  checkLogin,
   Response,
   AxiosRequestConfig as RequestConfig,
 };

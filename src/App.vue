@@ -1,25 +1,33 @@
 <template>
   <n-config-provider :theme-overrides="{ common: { fontWeightStrong: '800' } }">
-    <user-menu />
-    <n-layout has-sider style="height: 100%">
-      <n-layout-sider
-        v-bind="siderProps"
-        @expand="collapsed = false"
-        @collapse="collapsed = true"
-      >
-        <sider :collapsed="collapsed" />
-      </n-layout-sider>
-      <n-layout v-bind="contentProps">
-        <router-view />
+    <NMessageProvider>
+      <user-menu />
+      <n-layout has-sider style="height: 100%">
+        <!-- Sider -->
+        <n-layout-sider
+          v-bind="siderProps"
+          @expand="collapsed = false"
+          @collapse="collapsed = true"
+        >
+          <sider :collapsed="collapsed" />
+        </n-layout-sider>
+        <!-- Content -->
+        <n-layout v-bind="contentProps">
+          <router-view />
+        </n-layout>
       </n-layout>
-    </n-layout>
+    </NMessageProvider>
   </n-config-provider>
 </template>
 
 <script>
-import { NLayout, NLayoutSider, NConfigProvider, darkTheme } from "naive-ui";
-import { defineComponent, on, onMounted, onUpdated, ref } from "vue";
-import { useStore } from "vuex";
+import {
+  NLayout,
+  NLayoutSider,
+  NConfigProvider,
+  NMessageProvider,
+} from "naive-ui";
+import { defineComponent, ref, onUnmounted, onUpdated } from "vue";
 import UserMenu from "./components/UserMenu.vue";
 import Sider from "./components/Sider.vue";
 
@@ -47,44 +55,20 @@ export default defineComponent({
     Sider,
     NConfigProvider,
     UserMenu,
+    NMessageProvider,
   },
 
   setup() {
-    const store = useStore();
-
-    const handleCredentialResponse = (response) => {
-      console.log("Encoded JWT ID token: " + response.credential);
-      store.commit('parseToken', response.credential)
-      store.commit("login");
-    };
-
-    const loadGoogle = () => {
-      window.google.accounts.id.initialize({
-        client_id:
-          "869629692788-45qf48a9i2t88hdhjiei336msfm12sov.apps.googleusercontent.com",
-        callback: handleCredentialResponse,
-      });
-
-      window.google.accounts.id.renderButton(
-        document.getElementById("sign-in-btn"),
-        { theme: "outline", size: "large" } // customization attributes
-      );
-
-      window.google.accounts.id.prompt(); // also display the One Tap dialog
-    };
-
-    onMounted(() => {
-      loadGoogle();
-    });
-
     onUpdated(() => {
-      if (!store.state.isLogin) loadGoogle();
-    });
+            console.log('updated')
 
+    })
+    onUnmounted(() => {
+      console.log('hi')
+    })
     return {
       siderProps,
       contentProps,
-      darkTheme,
       collapsed: ref(false),
     };
   },

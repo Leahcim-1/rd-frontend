@@ -14,9 +14,10 @@
 <script lang="ts" >
 import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import signInBtn from "../assets/sign-btn.png";
-import {  NAvatar, NDropdown, MenuOption } from "naive-ui";
-import { fetchUserInfo } from "../api/index";
+import {  NAvatar, NDropdown, MenuOption, useMessage } from "naive-ui";
+import { checkLogin } from "../api/index";
 import { useStore } from 'vuex'
+import { useRouter } from "vue-router";
 
 const LOGOUT_KEY = "logout"
 const options: MenuOption[] = [
@@ -33,26 +34,63 @@ export default defineComponent({
 
   },
   setup() {
-    const signedIn = ref(false);
-
     const store = useStore()
+    const message = useMessage();
+    const router = useRouter();
 
     const isLogin = computed(() => store.state.isLogin)
 
     const userInfo = computed(() => store.state.userInfo)
 
-    // const userSignIn = async () => {
-    //   const res = await fetchUserInfo()
-    //   print(res)
-    // }
+    const signedIn = ref(false);
 
-    onMounted(async () => {
-      // await userSignIn()
+
+    const handleCredentialResponse = async (response: any) => {
+      console.log("Encoded JWT ID token: " + response!.credential);
+      const isValid = await checkLogin({
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        data: {
+          token: response.credential
+        }
+      })
+
+      if (isValid) {
+        message.success("Login Successfully!")
+        store.commit('parseToken', response.credential)
+        store.commit("login");
+        signedIn.value = isLogin.value
+      } else {
+        message.error("Login Failed")
+        router.replace("/")
+      }
+    };
+
+    const loadGoogle = () => {
+      // eslint-disable-next-line
+      // @ts-ignore
+      window.google.accounts.id.initialize({
+        client_id:
+          "869629692788-45qf48a9i2t88hdhjiei336msfm12sov.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+      });
+
+      // eslint-disable-next-line
+      // @ts-ignore
+      window.google.accounts.id.renderButton(
+        document.getElementById("sign-in-btn"),
+        { theme: "outline", size: "large" } // customization attributes
+      );
+
+      // eslint-disable-next-line
+      // @ts-ignore
+      window.google.accounts.id.prompt(); // also display the One Tap dialog
+    };
+
+    onMounted(() => {
+      loadGoogle();
     });
-
-    watch(isLogin, () => {
-      signedIn.value = isLogin.value
-    })
 
 
     return {
@@ -72,7 +110,7 @@ export default defineComponent({
 #user-menu {
   position: fixed;
   top: 2rem;
-  right: 5rem;
+  right: 2rem;
   z-index: 10;
   text-align: center;
   display: flex;
