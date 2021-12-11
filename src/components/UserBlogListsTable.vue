@@ -6,81 +6,22 @@
   <n-divider />
 </template>
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  watch,
-  h,
-} from "vue";
+import { defineComponent, onMounted, ref, h } from "vue";
 import { useRouter } from "vue-router";
-import { NDivider, NH2, NSpin, NTag, DataTableColumns } from "naive-ui";
+import {
+  NDivider,
+  NH2,
+  NSpin,
+  NTag,
+  DataTableColumns,
+  useMessage,
+} from "naive-ui";
 import { Blog } from "../type/blog";
-import { fetchBlogLists } from "../api/index";
+import { fetchBlogListsByUserId, deleteBlogById } from "../api/index";
 import { useStore } from "vuex";
 import ListTable from "../composable/ListsTable.vue";
 import ActionDropDownMenu from "../composable/ActionDropDownMenu.vue";
-
-const columns: DataTableColumns = [
-  {
-    title: "ID",
-    key: "id",
-  },
-  {
-    title: "Title",
-    key: "title",
-  },
-  {
-    title: "Subtitle",
-    key: "subtitle",
-  },
-  {
-    title: "Tag",
-    key: "tag",
-    render(row) {
-      return h(
-        NTag,
-        {
-          style: {
-            marginRight: "6px",
-          },
-          type: "info",
-        },
-        {
-          default: () => row.tag,
-        }
-      );
-    },
-  },
-  {
-    key: "create_time",
-    title: "Created Time",
-  },
-  {
-    key: "update_time",
-    title: "Updated Time",
-  },
-  {
-    title: "Action",
-    key: "actions",
-    render(row) {
-      return h(
-        // eslint-disable-next-line
-        // @ts-ignore
-        ActionDropDownMenu,
-        {
-          rowEdit: () => {
-            console.log("edit", row.id);
-          },
-          rowDelete: () => {
-            console.log("delete", row.id);
-          },
-        }
-      );
-    },
-  },
-];
+import { AxiosRequestConfig } from "axios";
 
 export default defineComponent({
   name: "BlogList",
@@ -89,15 +30,87 @@ export default defineComponent({
     NSpin,
     ListTable,
     NH2,
-    NDivider
+    NDivider,
   },
 
   setup() {
     const blogs = ref<Blog[]>([]);
+    const loading = ref(false);
+    const pagination = ref({
+      limit: 10,
+      offset: 0,
+    });
     const router = useRouter();
+    const message = useMessage();
     const store = useStore();
 
-    const loading = ref(false);
+    const columns: DataTableColumns = [
+      {
+        title: "ID",
+        key: "id",
+      },
+      {
+        title: "Title",
+        key: "title",
+      },
+      {
+        title: "Subtitle",
+        key: "subtitle",
+      },
+      {
+        title: "Tag",
+        key: "tag",
+        render(row) {
+          return h(
+            NTag,
+            {
+              style: {
+                marginRight: "6px",
+              },
+              type: "info",
+            },
+            {
+              default: () => row.tag,
+            }
+          );
+        },
+      },
+      {
+        key: "create_time",
+        title: "Created Time",
+      },
+      {
+        key: "update_time",
+        title: "Updated Time",
+      },
+      {
+        title: "Action",
+        key: "actions",
+        render(row: any) {
+          return h(
+            // eslint-disable-next-line
+            // @ts-ignore
+            ActionDropDownMenu,
+            {
+              rowEdit: async () => {
+                console.log("edit", row.id);
+              },
+              rowDelete: async () => {
+                console.log("delete", row.id);
+                await deleteBlogById(row!.id);
+                message.success("Delete Post Successfully");
+                await getBlogLists({
+                  params: {
+                    limit: pagination.value.limit,
+                    offset: pagination.value.offset,
+                  },
+                });
+              },
+            }
+          );
+        },
+      },
+    ];
 
     const goToDetail = (id: string) => {
       router.push({
@@ -105,13 +118,15 @@ export default defineComponent({
       });
     };
 
-    const limit = computed(() => store.state.pagination.limit);
-    const offset = computed(() => store.state.pagination.offset);
-
-    const getBlogLists = async (config = {}) => {
-      const res = await fetchBlogLists<Blog>(config);
+    const getBlogLists = async (config: AxiosRequestConfig = {}) => {
+      const res = await fetchBlogListsByUserId<Blog>(
+        store.state.userInfo.id,
+        config
+      );
+      console.log(res);
       blogs.value = res.data;
     };
+
 
     const getDateString = (date: string) => {
       const timeStamp = Date.parse(date);
@@ -119,24 +134,13 @@ export default defineComponent({
       return dateString;
     };
 
-    const updateAction = () => {
-      blogs.value.map;
-    };
-
     onMounted(async () => {
-      const params = {
-        limit: limit.value,
-        offset: offset.value,
-      };
-      await getBlogLists({ params });
-    });
-
-    watch([limit, offset], async ([newLimit, newOffset]) => {
-      const params = {
-        limit: limit.value,
-        offset: offset.value,
-      };
-      await getBlogLists({ params });
+      await getBlogLists({
+        params: {
+          limit: pagination.value.limit,
+          offset: pagination.value.offset,
+        },
+      });
     });
 
     return {

@@ -9,7 +9,7 @@
         </n-layout-header>
         <n-layout-content>
           <user-blog-list-table />
-          <user-comments-list-table />
+          <!-- <user-comments-list-table /> -->
         </n-layout-content>
       </n-layout>
     </n-space>
@@ -33,7 +33,7 @@ export default defineComponent({
   name: "admin",
   components: {
     UserBlogListTable,
-    UserCommentsListTable,
+    // UserCommentsListTable,
     NSpace,
     NH1,
     NText,

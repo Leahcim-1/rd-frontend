@@ -28,12 +28,25 @@ const fetchBlogLists = async <Blog>(config: AxiosRequestConfig) => {
   return res.data;
 };
 
+const fetchBlogListsByUserId = async <Blog>(userId: string, config: AxiosRequestConfig) => {
+  type BlogRes = Response<Blog>;
+  const res = await blogRequest.get<BlogRes>(`/api/blog/user/${userId}`, config);
+  return res.data;
+};
+
+
 const fetchBlogDetail = async <Blog>(
   id: string,
   config: AxiosRequestConfig
 ) => {
   type BlogRes = Response<Blog>;
   const res = await blogRequest.get<BlogRes>(`/api/blog/${id}`, config);
+  return res.data;
+};
+
+const deleteBlogById = async <Blog>(blogId: string, config: AxiosRequestConfig = {}) => {
+  type BlogRes = Response<Blog>;
+  const res = await blogRequest.delete<BlogRes>(`/api/blog/${blogId}`, config);
   return res.data;
 };
 
@@ -71,9 +84,11 @@ const postBlog = async <Blog>(data: Blog, config: AxiosRequestConfig = {}) => {
 
 export {
   fetchBlogLists,
+  fetchBlogListsByUserId,
   fetchBlogDetail,
-  fetchCommentsByBlogId,
   postBlog,
+  deleteBlogById,
+  fetchCommentsByBlogId,
   fetchUserInfo,
   checkLogin,
   Response,

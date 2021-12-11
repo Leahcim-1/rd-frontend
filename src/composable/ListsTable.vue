@@ -3,15 +3,13 @@
     <n-data-table 
       :columns="col" 
       :data="data" 
-      :pagination="{
-        pageSize: 5
-      }"
+      :pagination="pagination"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { NDataTable } from 'naive-ui'
 
 export default defineComponent({
@@ -23,15 +21,19 @@ export default defineComponent({
     columns: {
       type: Array,
       required: true
-    }
+    },
   },
   components: {
     NDataTable
   },
   setup(props) {
     return {
+      pagination: {
+        pageSize: 5,
+      }, 
       data: computed(() => props.lists),
-      col: computed(() => props.columns)
+      col: computed(() => props.columns),
+
     }
   },
 })

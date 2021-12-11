@@ -52,6 +52,7 @@ export default createStore({
 
     parseToken(state, jwt) {
       const playload: any = jwtDecode(jwt)
+      console.log(playload!.sub)
       state.userInfo.email = playload!.email
       state.userInfo.id = playload!.sub
       state.userInfo.name = playload!.name
