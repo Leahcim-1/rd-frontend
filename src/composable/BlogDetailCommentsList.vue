@@ -10,16 +10,6 @@
         :time="getDateAndTime(comment.created_time)"
       ></n-timeline-item>
     </n-timeline>
-    <n-timeline :icon-size="20">
-      <n-timeline-item
-        v-for="comment in comments"
-        :key="comment.id"
-        type="info"
-        :title="comment.user_name"
-        :content="comment.body"
-        :time="getDateAndTime(comment.created_time)"
-      ></n-timeline-item>
-    </n-timeline>
   </div>
 </template>
 
@@ -58,6 +48,7 @@ export default defineComponent({
     onMounted(async () => {
       await getCommentByBlogId();
     });
+
 
     return {
       comments,

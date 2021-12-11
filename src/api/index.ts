@@ -62,6 +62,11 @@ const fetchCommentsByBlogId = async <Comment>(
   return res.data;
 };
 
+const postComments = async <Comment>(data: Comment, config: AxiosRequestConfig) => {
+  const res = await commentRequest.post('/api/comments', data, config)
+  return res.data;
+}
+
 const fetchUserInfo = async () => {
   const res = await userRequest.get("/login");
   return res.data;
@@ -83,12 +88,16 @@ const postBlog = async <Blog>(data: Blog, config: AxiosRequestConfig = {}) => {
 };
 
 export {
+  // Blog
   fetchBlogLists,
   fetchBlogListsByUserId,
   fetchBlogDetail,
   postBlog,
   deleteBlogById,
+  // Comment
   fetchCommentsByBlogId,
+  postComments,
+  // User
   fetchUserInfo,
   checkLogin,
   Response,

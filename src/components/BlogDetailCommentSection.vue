@@ -1,7 +1,7 @@
 <template>
   <div>
     <n-divider title-placement="center"><h3>Comments</h3></n-divider>
-    <blog-detail-post-comment />
+    <blog-detail-post-comment :blogId="id"/>
     <blog-detail-comments-list :blogId="id" />
   </div>
 </template>

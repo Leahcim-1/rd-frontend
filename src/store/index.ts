@@ -14,7 +14,7 @@ export default createStore({
       email: "",
       picture: "",
       id: "",
-    }
+    },
   },
   getters: {
     loginStatus(state) { return state.isLogin },
@@ -75,7 +75,7 @@ export default createStore({
     changePageSize(state, pageSize) {
       state.pagination.limit = pageSize
       state.pagination.offset = 0
-    }
+    },
   },
   actions: {},
   modules: {},
